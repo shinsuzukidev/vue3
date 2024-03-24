@@ -1,43 +1,42 @@
 ﻿<script setup lang="ts">
-import { ref, computed } from "vue";
+import { computed, inject } from "vue";
+import type { Member } from "../interfaces";
 
 interface Props {
   id: number;
-  name: string;
-  email: string;
-  points: number;
-  note?: string;
 }
-const props = withDefaults(defineProps<Props>(), { note: "--" });
+const props = defineProps<Props>();
 
-const localPoints = ref(props.points);
-// const localNote = computed((): string => {
-//   let localNote = props.note;
-//   if (localNote == undefined) {
-//     localNote = "--";
-//   }
-//   return localNote;
-// });
+const memberList = inject("memberList") as Map<number, Member>;
 
-const pointUp = (): void => {
-  localPoints.value++;
-};
+const member = computed((): Member => {
+  return memberList.get(props.id) as Member;
+});
+
+const localNote = computed((): string => {
+  let localNote = member.value.note;
+  if (localNote == undefined) {
+    localNote = "--";
+  }
+  return localNote;
+});
 </script>
 
 <template>
   <section class="box">
-    <h4>{{ name }} info</h4>
+    <h4>{{ member.name }} info</h4>
     <dl>
       <dt>ID</dt>
-      <dd>{{ id }}</dd>
+      <dd>{{ member.id }}</dd>
       <dt>mail</dt>
-      <dd>{{ email }}</dd>
-      <dt>point</dt>
-      <dd>{{ localPoints }}</dd>
-      <dt>bikou</dt>
-      <dd>{{ note }}</dd>
+      <dd>{{ member.email }}</dd>
+      <dt>points</dt>
+      <dd>
+        <input type="number" v-bind:number="member.points" />
+      </dd>
+      <dt>note</dt>
+      <dd>{{ localNote }}</dd>
     </dl>
-    <button v-on:click="pointUp">point add</button>
   </section>
 </template>
 
