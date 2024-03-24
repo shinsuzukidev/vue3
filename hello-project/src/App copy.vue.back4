@@ -1,0 +1,237 @@
+<script setup lang="ts">
+import { ref, reactive, computed, watchEffect } from 'vue';
+const url = ref('https://vuejs.org');
+const isDisabled = ref(true);
+let clickCount = ref(0);
+
+const myClick = () => {
+  clickCount.value++;
+  //alert('click1')
+};
+
+const mousePointX = ref(0);
+const mousePointY = ref(0);
+
+const onImageMouseMove = (event: MouseEvent): void => {
+  console.log(event.offsetX);
+  mousePointX.value = event.offsetX;
+  mousePointY.value = event.offsetY;
+};
+
+const inputName = ref('双方向');
+
+const inputNameBind = ref('しんちゃん');
+const inputNameOn = ref('ななし');
+const onInputName = (event: Event): void => {
+  const element = event.target as HTMLInputElement;
+  inputNameOn.value = element.value;
+};
+
+const inputName2Way = ref('双方向');
+const onInputName2Way = (event: Event): void => {
+  const element = event.target as HTMLInputElement;
+  inputName2Way.value = element.value;
+};
+
+const htmlStr = ref(`<a href="https://vuejs.org//">Vue.jsのTOPページ<a/>`);
+
+const hellotext = ref('hello world!');
+const onClick = () => {
+  console.log(hellotext);
+  change();
+};
+
+const change = () => (hellotext.value = 'Changed Text!!');
+
+// オブジェクト
+const obj1 = ref({ a: 1, b: 2 });
+obj1.value.a++;
+console.log(obj1.value.a);
+
+// オブジェクト専用、valueが不要になる
+const obj2 = reactive({ a: 1, b: 2 });
+obj2.a++;
+console.log(obj2.a);
+
+// v-if
+const randValue = computed((): number => {
+  return Math.round(Math.random() * 100);
+});
+
+// v-for
+//const fruitList: string[] = ref(['apple', 'banana', 'orange']);
+const fruitListInit: { [key: number]: string } = { 10: 'apple', 11: 'banana', 12: 'orange' };
+const fruitList = ref(fruitListInit);
+
+// Map
+const cockList = new Map<number, string>();
+cockList.set(12, 'white');
+cockList.set(13, 'blue');
+cockList.set(14, 'ny');
+
+interface Cooktail {
+  id: number;
+  name: string;
+  price: number;
+}
+
+const cooktailList: Cooktail[] = [
+  { id: 11, name: 'white', price: 1200 },
+  { id: 12, name: 'blue', price: 1300 },
+  { id: 13, name: 'ny', price: 1400 },
+  { id: 14, name: 'mati', price: 1500 }
+];
+
+const cooktailNo = ref(1);
+const priceMsg = ref('');
+
+watchEffect((): void => {
+  priceMsg.value = getCooktailInfo(cooktailNo.value);
+});
+
+function getCooktailInfo(cooktailNo: number): string {
+  const cooktailList2 = new Map<number, Cooktail>();
+  cooktailList2.set(1, { id: 11, name: 'yellow', price: 1200 });
+  cooktailList2.set(1, { id: 12, name: 'white', price: 1300 });
+  cooktailList2.set(1, { id: 13, name: 'black', price: 1400 });
+  cooktailList2.set(1, { id: 14, name: 'blue', price: 1500 });
+
+  const cooktail = cooktailList2.get(cooktailNo);
+  let msg = '該当カクテルはありません';
+  if (cooktail) {
+    msg = `該当するカクテルは ${cooktail.name} 、価格は ${cooktail.price}です。`;
+  }
+  return msg;
+}
+
+setInterval((): void => {
+  cooktailNo.value = Math.round(Math.random() * 3) + 1;
+}, 1000);
+</script>
+
+<template>
+  <section>
+    <img
+      src="/images/logo.svg"
+      alto="logo"
+      width="75"
+      height="75"
+      v-on:mousemove="onImageMouseMove($event)"
+    />
+    <p>mouser pos: x={{ mousePointX }}, y={{ mousePointY }}</p>
+  </section>
+
+  <p><a v-bind:href="url" target="_blank">vue.jsのサイト</a></p>
+  <p><button type="button" v-bind:disabled="isDisabled">send</button></p>
+  <p v-bind:class="{ 'font-red': true }">site no font</p>
+  <p><button v-on:click="myClick">click1</button> {{ clickCount }}</p>
+  <br />
+  <hr />
+
+  <div>
+    <p>
+      v-model:
+      <input type="text" v-model="inputName" />
+      {{ inputName }}
+    </p>
+  </div>
+
+  <div>
+    <input type="text" v-bind:value="inputNameBind" />
+    <br />
+    <input type="text" v-on:input="onInputName" />
+    <p>{{ inputNameOn }}</p>
+  </div>
+
+  <div>
+    <input type="text" v-bind:value="inputName2Way" v-on:input="onInputName2Way" />
+    <p>{{ inputName2Way }}</p>
+  </div>
+
+  <div>
+    {{ htmlStr }}
+  </div>
+
+  <br />
+  <div>
+    <div>{{ hellotext }}</div>
+    <button v-on:click="onClick">onClick</button>
+  </div>
+  <br />
+  <div>
+    {{ randValue }}:
+    <template v-if="randValue == 100">100</template>
+    <template v-else-if="randValue >= 80">80以上</template>
+    <template v-else-if="randValue >= 50">50以上</template>
+    <template v-else>50未満</template>
+  </div>
+
+  <br />
+  v-for:id,index
+  <ul>
+    <li v-for="(fruit, id, index) in fruitList" v-bind:key="`idplus` + id">
+      id:{{ id }} {{ fruit }} [{{ index }}]
+    </li>
+  </ul>
+  <br />
+  v-for
+  <ul>
+    <li v-for="[id, cockname] in cockList" v-bind:key="id">{{ id }} {{ cockname }}</li>
+  </ul>
+  <br />
+  v-for:interfaceを利用
+  <ul>
+    <li v-for="cooktailItem in cooktailList" v-bind:key="cooktailItem.id">
+      {{ cooktailItem.id }}_{{ cooktailItem.name }}_{{ cooktailItem.price }}
+    </li>
+  </ul>
+  <br />
+  v-for:interfaceを利用,条件あり
+  <ul>
+    <li
+      v-for="cooktailItem in cooktailList.filter((x) => x.price >= 1300)"
+      v-bind:key="cooktailItem.id"
+    >
+      {{ cooktailItem.id }}_{{ cooktailItem.name }}_{{ cooktailItem.price }}
+    </li>
+  </ul>
+  <br />
+  watcher
+  <div>
+    <p>現在のカクテル番号: {{ cooktailNo }}</p>
+    <p>{{ priceMsg }}</p>
+  </div>
+</template>
+
+<style scoped>
+header {
+  line-height: 1.5;
+}
+
+.logo {
+  display: block;
+  margin: 0 auto 2rem;
+}
+
+.font-red {
+  color: red;
+}
+
+@media (min-width: 1024px) {
+  header {
+    display: flex;
+    place-items: center;
+    padding-right: calc(var(--section-gap) / 2);
+  }
+
+  .logo {
+    margin: 0 2rem 0 0;
+  }
+
+  header .wrapper {
+    display: flex;
+    place-items: flex-start;
+    flex-wrap: wrap;
+  }
+}
+</style>

@@ -1,0 +1,13 @@
+﻿<template>
+  <section class="box">
+    <h4>one component</h4>
+    <p>component is ...</p>
+  </section>
+</template>
+
+<style scoped>
+.box {
+  border: green 1px dashed;
+  margin: 1px;
+}
+</style>

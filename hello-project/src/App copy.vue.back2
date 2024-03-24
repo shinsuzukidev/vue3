@@ -1,0 +1,24 @@
+<script setup lang="ts">
+import OneSection from "./components/OneSection.vue";
+import WithModule from "./components/WithModule.vue";
+</script>
+
+<template>
+  <h1>componet basic</h1>
+  <section>
+    <h2>component one</h2>
+    <OneSection />
+  </section>
+  <section>
+    <h2>component muilti</h2>
+    <OneSection />
+    <OneSection />
+  </section>
+
+  <section>
+    <WithModule />
+    <WithModule />
+  </section>
+</template>
+
+<style scoped></style>

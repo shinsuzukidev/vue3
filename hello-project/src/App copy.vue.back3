@@ -1,0 +1,28 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import OneInfo from "./components/OneInfo.vue";
+
+const propsTitle = ref("発生した乱数");
+const rand = Math.round(
+  Math.random() * 100
+);
+const propsContent = ref(rand);
+</script>
+
+<template>
+  <h1>Props basic</h1>
+  <section>
+    <h2>属性に記述</h2>
+    <OneInfo
+      v-bind:title="propsTitle"
+      v-bind:content="propsContent"
+    />
+  </section>
+
+  <section>
+    <WithModule />
+    <WithModule />
+  </section>
+</template>
+
+<style scoped></style>
