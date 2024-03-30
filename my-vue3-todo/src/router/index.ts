@@ -5,6 +5,7 @@ import About from "@/views/About.vue";
 import NotFount from "@/views/NotFound.vue";
 import Blog from "@/views/Blog.vue";
 import BlogDtl from "@/views/BlogDtl.vue";
+import Store from "@/views/Store.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -38,6 +39,11 @@ const router = createRouter({
       path: "/blog/:id",
       name: "blogDtl",
       component: BlogDtl
+    },
+    {
+      path: "/store/",
+      name: "store",
+      component: Store
     }
   ]
 });

@@ -16,7 +16,8 @@ const goBlog = () => {
     <!-- <MainTodo /> -->
     <nav>
       <router-link to="/">Todo</router-link>
-      | <router-link to="/about">About</router-link> | <router-link to="/blog">Blog</router-link>
+      | <router-link to="/about">About</router-link> | <router-link to="/blog">Blog</router-link> |
+      <router-link to="/store">Store</router-link>
       <!-- | <span @click="goBlog">Blog</span>
       |<router-link to="/blog/1">blog1</router-link>
       |<router-link to="/blog/2">blog2</router-link> -->
