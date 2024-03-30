@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useTodoList } from "@/composables/useTodoList";
 
 const todo = ref<string | undefined>();
@@ -36,6 +36,10 @@ const deleteTodo = (id: number) => {
 const changeCheck = (id: number) => {
   check(id);
 };
+
+const countFin = computed(() => {
+  return todoList.value.filter((x) => x.checked).length;
+});
 </script>
 
 <template>
@@ -60,6 +64,11 @@ const changeCheck = (id: number) => {
         <button class="btn pink" v-on:click="deleteTodo(todoItem.id)">削</button>
       </div>
     </div>
+  </div>
+
+  <div class="finCount">
+    <span>完了: {{ countFin }}</span>
+    <span>未完了: {{ todoList.length - countFin }}</span>
   </div>
 </template>
 
@@ -124,5 +133,9 @@ const changeCheck = (id: number) => {
   color: #777;
   text-decoration: line-through;
   background-color: #ddd;
+}
+.finCount {
+  margin-top: 8px;
+  font-size: 0.8em;
 }
 </style>
