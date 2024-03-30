@@ -4,6 +4,7 @@ import MainTodo from "@/views/MainToto.vue";
 import About from "@/views/About.vue";
 import NotFount from "@/views/NotFound.vue";
 import Blog from "@/views/Blog.vue";
+import BlogDtl from "@/views/BlogDtl.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -35,8 +36,8 @@ const router = createRouter({
     },
     {
       path: "/blog/:id",
-      name: "blogid",
-      component: Blog
+      name: "blogDtl",
+      component: BlogDtl
     }
   ]
 });
