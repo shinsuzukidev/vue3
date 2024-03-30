@@ -1,6 +1,8 @@
 ﻿<script setup lang="ts">
 import { ref, computed } from "vue";
 import { useTodoList } from "@/composables/useTodoList";
+import BaseButton from "@/components/BaseButton.vue";
+import ButtonAdd from "@/components/ButtonAdd.vue";
 
 const todo = ref<string | undefined>();
 const isEdit = ref(false);
@@ -40,13 +42,17 @@ const changeCheck = (id: number) => {
 const countFin = computed(() => {
   return todoList.value.filter((x) => x.checked).length;
 });
+
+// const test = (str: string, id: number) => {
+//   alert("call test, parama:" + str + "_" + id);
+// };
 </script>
 
 <template>
   <div>
     <input type="text" class="todo_input" placeholder="+ TODOを入力" v-model="todo" />
-    <button class="btn green" v-on:click="editTodo" v-if="isEdit">変更</button>
-    <button class="btn" v-on:click="addTodo" v-else>追加</button>
+    <BaseButton color="green" v-on:click="editTodo" v-if="isEdit">変更</BaseButton>
+    <ButtonAdd @addClick="addTodo" v-else>追加</ButtonAdd>
   </div>
   <div class="box_list">
     <div v-for="todoItem in todoList" v-bind:key="todoItem.id" class="todo_list">
@@ -60,8 +66,8 @@ const countFin = computed(() => {
         <label>{{ todoItem.task }}</label>
       </div>
       <div class="btns">
-        <button class="btn green" v-on:click="showTodo(todoItem.id)">編</button>
-        <button class="btn pink" v-on:click="deleteTodo(todoItem.id)">削</button>
+        <BaseButton color="green" @click="showTodo(todoItem.id)">編</BaseButton>
+        <BaseButton color="pink" @click="deleteTodo(todoItem.id)">削</BaseButton>
       </div>
     </div>
   </div>
@@ -88,7 +94,6 @@ const countFin = computed(() => {
   font-size: 14px;
   color: #fff;
   text-align: center;
-  background-color: #03a9f4;
   border: 1px solid #eee;
   border-radius: 6px;
 }
@@ -119,14 +124,6 @@ const countFin = computed(() => {
 .check {
   margin-right: 12px;
   transform: scale(1.6);
-}
-
-.green {
-  background-color: #00c853;
-}
-
-.pink {
-  background-color: #ff4081;
 }
 
 .fin {
